@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"tsc -w\" \"deta watch dist\"",
+    "deploy": "tsc && deta deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "meta": "*",
+    "cors": "^2.8.5",
+    "deta": "^1.0.1",
+    "ethers": "^5.5.3",
+    "express": "^4.17.2",
+    "img-producer": "*"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "concurrently": "^7.0.0"
+  }
+}

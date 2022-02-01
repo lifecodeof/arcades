@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ]
+}

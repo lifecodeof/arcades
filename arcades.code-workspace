@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "apps\\contracts"
+		},
+		{
+			"path": "apps\\server"
+		},
+		{
+			"path": "apps\\web"
+		},
+		{
+			"path": "packages\\img-producer"
+		},
+		{
+			"path": "packages\\meta"
+		}
+	]
+}

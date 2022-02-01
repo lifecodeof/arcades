@@ -1,0 +1,1 @@
+{"id":"e132e73f-31b0-4e9d-af67-4e4efa08b314","space":12880,"runtime":"nodejs14.x","name":"nft-artisan","path":"zi9xsu","project":"a0s0s5hs","account":"144798365827","region":"eu-central-1","deps":["ethers@^5.5.3","express@^4.17.2","body-parser@^1.19.1","cors@^2.8.5","deta@^1.0.1"],"envs":["BINARY_CONTENT_TYPES"],"public":false,"log_level":"","cron":""}
