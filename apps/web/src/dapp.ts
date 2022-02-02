@@ -12,9 +12,9 @@ export class dApp {
     provider: ethers.providers.Web3Provider
     signer: ethers.providers.JsonRpcSigner
     assetBase = "https://zi9xsu.deta.dev/"
-    event = {
+    error = {
         listener: (_e: any) => { },
-        emit: (e: any) => this.event.listener(e)
+        emit: (e: any) => this.error.listener(e)
     }
 
     constructor() {

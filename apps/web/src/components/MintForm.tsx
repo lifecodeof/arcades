@@ -6,11 +6,15 @@ import dapp from "../dapp";
 import { submit } from './SubmitForm';
 
 const mint = async (to: string, name: string, onMint: Function) => {
-    const tx = await (await dapp.arcades.mint(to, { value: ethers.utils.parseEther("0.005") })).wait()
-    const tokenId: BigNumber = tx.events.find(e => e.event == "Transfer").args.tokenId
-    const id = tokenId.toString()
-    onMint()
-    await submit(id, name)
+    try {
+        const tx = await (await dapp.arcades.mint(to, { value: ethers.utils.parseEther("0.005") })).wait()
+        const tokenId: BigNumber = tx.events?.find(e => e.event == "Transfer")?.args?.tokenId
+        const id = tokenId.toString()
+        onMint()
+        await submit(id, name)
+    } catch (error) {
+        dapp.error.emit(error)
+    }
 }
 
 const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {

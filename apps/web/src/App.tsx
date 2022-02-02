@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import dapp from './dapp'
 import MintForm from "./components/MintForm"
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Container, Tabs, Tab, Alert, Snackbar } from '@mui/material'
 import NavBar from './components/NavBar'
 import SubmitForm from './components/SubmitForm'
@@ -24,25 +24,24 @@ async function getNfts() {
 }
 
 const App: FC = () => {
+  const [ids, setIds] = useState<number[]>([])
   const [tab, setTab] = useState(0)
   const [nfts, setNfts] = useState<Nft[]>()
-  const [error, setError] = useState(false)// new Error
+  const [error, setError] = useState<AxiosError & Error | null>(null)
   const refreshNfts = () => getNfts().then(setNfts)
   if (!nfts) refreshNfts()
-  const handleClose = () => setError(false)
+  const handleClose = () => setError(null)
+  dapp.error.listener = setError
 
-  useEffect(() => {
-    dapp.event.listener = x => console.log({ x })
-    // return dapp.
-  })
+  useEffect(() => { dapp.signer.getAddress().then(me => nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []).then(setIds) })
 
   return (
     <>
       <NavBar />
 
-      <Snackbar open={error} autoHideDuration={10000} onClose={handleClose}>
+      <Snackbar open={error != null} autoHideDuration={10000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          This is a error message!
+          {error?.isAxiosError ? error.response?.data : error?.message}
         </Alert>
       </Snackbar>
 
@@ -53,7 +52,7 @@ const App: FC = () => {
             <Tab label="Submit" id="submitTab" />
           </Tabs>
           <div hidden={tab != 0}><MintForm onSubmit={refreshNfts} /></div>
-          <div hidden={tab != 1}><SubmitForm /></div>
+          <div hidden={tab != 1}><SubmitForm ids={ids} /></div>
         </div>
 
         <NftList nfts={nfts || []} />
