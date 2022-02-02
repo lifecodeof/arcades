@@ -24,14 +24,14 @@ const SubmitForm: FC = () => {
         <Paper variant="outlined" sx={{ p: 2, width: "max-content" }}>
             <Grid container spacing={5} alignItems="center">
                 <Grid item>
-                    <TextField variant="outlined" label="address" value={id} onChange={handleChange(setId)} />
+                    <TextField variant="outlined" label="id" value={id} onChange={handleChange(setId)} />
                 </Grid>
                 <Grid item>
                     <TextField variant="outlined" label="name" value={name} onChange={handleChange(setName)} />
                 </Grid>
                 <Grid item>
                     <Button variant="contained" size="large" onClick={handleSubmit}
-                        disabled={loading && id == "" && name == ""} >Scrib{loading ? "ing" : "e"}</Button> {/* cspell:disable-line */}
+                        disabled={loading || id == "" || name == ""} >Scrib{loading ? "ing" : "e"}</Button> {/* cspell:disable-line */}
                 </Grid>
             </Grid>
         </Paper>

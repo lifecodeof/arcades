@@ -1,8 +1,8 @@
 import { Contract, ethers } from "ethers"
-import ARC from "./artifacts/contracts/Arcades.sol/Arcades.json"
-import SCRAP from "./artifacts/contracts/ScrapToken.sol/ScrapToken.json"
-import addresses from "./artifacts/contract-addresses.json"
-import { Arcades, ScrapToken } from "../typechain"
+import ARC from "contracts/artifacts/contracts/Arcades.sol/Arcades.json"
+import SCRAP from "contracts/artifacts/contracts/ScrapToken.sol/ScrapToken.json"
+import addresses from "contracts/artifacts/contract-addresses.json"
+import { Arcades, ScrapToken } from "contracts/typechain"
 
 declare let window: Window & typeof globalThis & { ethereum: any, dapp: dApp };
 
@@ -12,12 +12,16 @@ export class dApp {
     provider: ethers.providers.Web3Provider
     signer: ethers.providers.JsonRpcSigner
     assetBase = "https://zi9xsu.deta.dev/"
+    event = {
+        listener: (_e: any) => { },
+        emit: (e: any) => this.event.listener(e)
+    }
 
     constructor() {
         window.ethereum.request({ method: 'eth_requestAccounts' })
         this.provider = new ethers.providers.Web3Provider(window.ethereum)
         this.signer = this.provider.getSigner()
-        this.arcades = new ethers.Contract(addresses.metalTag, ARC.abi, this.signer) as Arcades
+        this.arcades = new ethers.Contract(addresses.arcades, ARC.abi, this.signer) as Arcades
         this.scrapToken = new ethers.Contract(addresses.scrapToken, SCRAP.abi, this.signer) as ScrapToken
     }
 

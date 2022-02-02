@@ -40,7 +40,7 @@ const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {
                 </Grid>
                 <Grid item>
                     <Button variant="contained" size="large" onClick={handleSubmit}
-                        disabled={loading && mintTo == "" && name == ""} >{btnText}</Button>
+                        disabled={loading || mintTo == "" || name == ""} >{btnText}</Button>
                 </Grid>
             </Grid>
         </Paper>
