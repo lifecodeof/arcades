@@ -2,9 +2,9 @@ import express from 'express'
 import { Deta } from "deta"
 import { ethers } from "ethers"
 import { json } from 'body-parser'
-import { defaultImage } from 'img-producer'
+import { processImage } from './img'
 import cors from "cors"
-import { Metadata, randomAttributes } from 'meta'
+import { Metadata, randomAttributes } from './meta'
 import { arcades } from './ethers'
 
 const deta = Deta("a0s0s5hs_nkrFgFqivrcYthYvJAysjwF48JgexGCf") // cspell:disable-line
@@ -18,13 +18,15 @@ app.use(cors())
 app.post("/submit", async (req, res) => {
     const { name, signature, id } = req.body
     if (await db.get(id) == null) return res.status(400).send(`#${id} is already submitted`)
+    if (typeof name != "string") return res.status(400).send("name must be string")
+    if (name.length != 3) return res.status(400).send("name length must be 3")
 
     const address = ethers.utils.verifyMessage(`I am the owner of #${id} ARC`, signature)
 
     const ownerAddress = await arcades.ownerOf(id).catch(() => "err")
     if (ownerAddress != address) return res.sendStatus(400)
 
-    const p1 = defaultImage().then(image => {
+    const p1 = processImage("TOD").then(image => {
         drive.put(id + ".png", { data: image, contentType: "image/png" })
     })
 
@@ -52,7 +54,7 @@ app.get('/assets/:id', async (req, res) => {
 
 app.get('/images/:id', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*")
-        .status(200).type("image/png").send(await defaultImage()) // Temp image
+        .status(200).type("image/png").send(await processImage("TOD")) // Temp image
     /*
         const blob = await drive.get(req.params.id)
         if (blob)
