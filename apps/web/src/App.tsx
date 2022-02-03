@@ -24,16 +24,19 @@ async function getNfts() {
 }
 
 const App: FC = () => {
-  const [ids, setIds] = useState<number[]>([])
+  const [me, setMe] = useState("")
   const [tab, setTab] = useState(0)
   const [nfts, setNfts] = useState<Nft[]>()
   const [error, setError] = useState<AxiosError & Error | null>(null)
   const refreshNfts = () => getNfts().then(setNfts)
   if (!nfts) refreshNfts()
   const handleClose = () => setError(null)
-  dapp.error.listener = setError
+  dapp.error.listener = e => {
+    console.error(e)
+    setError(e)
+  }
 
-  useEffect(() => { dapp.signer.getAddress().then(me => nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []).then(setIds) })
+  useEffect(() => { dapp.signer.getAddress().then(setMe) })
 
   return (
     <>
@@ -52,7 +55,7 @@ const App: FC = () => {
             <Tab label="Submit" id="submitTab" />
           </Tabs>
           <div hidden={tab != 0}><MintForm onSubmit={refreshNfts} /></div>
-          <div hidden={tab != 1}><SubmitForm ids={ids} /></div>
+          <div hidden={tab != 1}><SubmitForm ids={nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []} /></div>
         </div>
 
         <NftList nfts={nfts || []} />

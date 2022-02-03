@@ -13,7 +13,7 @@ const drive = deta.Drive("nfts")
 
 const app = express()
 app.use(json())
-app.use(cors())
+app.use(cors({ origin:true }))
 
 app.post("/submit", async (req, res) => {
     const { name, signature, id } = req.body
@@ -26,9 +26,9 @@ app.post("/submit", async (req, res) => {
     const ownerAddress = await arcades.ownerOf(id).catch(() => "err")
     if (ownerAddress != address) return res.status(400).send(`You are not own #${id} ARC`)
 
-    const p1 = processImage("TOD").then(image => {
+    const p1 = processImage(name).then(image => 
         drive.put(id + ".png", { data: image, contentType: "image/png" })
-    })
+    )
 
     const p2 = db.put(randomAttributes({
         name, image: `https://${req.hostname}/images/${id}.png`, description: "", external_url: ""
@@ -53,15 +53,20 @@ app.get('/assets/:id', async (req, res) => {
 })
 
 app.get('/images/:id', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*")
-        .status(200).type("image/png").send(await processImage("TOD")) // Temp image
-    /*
-        const blob = await drive.get(req.params.id)
-        if (blob)
-            res.status(200).type("image/png").send(blob.stream())
-        else
-            res.sendStatus(404)
-     */
+    try {
+        const image = await new Promise<Buffer>(async (resolve, reject) => {
+            const chunks: Buffer[] = []
+            const blob = await drive.get(req.params.id)
+            if (blob == null) return reject()
+            const stream = blob.stream()
+            stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+            stream.on('error', (err) => reject(err));
+            stream.on('end', () => resolve(Buffer.concat(chunks)));
+        })
+        res.status(200).type("image/png").send(image)
+    } catch (error) {
+        res.sendStatus(404)
+    }
 })
 
 export default app

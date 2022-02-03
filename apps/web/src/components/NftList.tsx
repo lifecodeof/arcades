@@ -5,12 +5,12 @@ import dapp from "../dapp"
 import { Nft } from "meta"
 
 const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
-    const nftCards = nfts.map(nft => <Grid item>
+    const nftCards = nfts.map(nft => <Grid item key={nft.id}>
         <Card>
             <CardMedia component="img" image={nft.meta.image} sx={{ width: "32rem" }} />
             <CardContent>
                 <Typography gutterBottom variant="h5">
-                    {nft.meta.name}
+                    {nft.meta.name} &#35;{nft.id}
                 </Typography>
                 <Typography>owner:&nbsp;
                     <Link href={`https://testnet.bscscan.com/address/${nft.owner}`}
@@ -22,7 +22,7 @@ const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
     )
 
     return (
-        <Grid container sx={{ mt: 2 }} spacing={4}>
+        <Grid container sx={{ mt: 4, justifyContent: "space-evenly" }}>
             {nftCards}
         </Grid>
     )

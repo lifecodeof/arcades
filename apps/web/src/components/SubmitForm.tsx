@@ -1,7 +1,8 @@
-import { Paper, Grid, TextField, Button, MenuItem, Select, InputLabel, FormControl,Autocomplete } from "@mui/material";
+import { Paper, Grid, TextField, Button, MenuItem, Select, InputLabel, FormControl, Autocomplete } from "@mui/material";
 import axios from "axios";
 import { ChangeEvent, FC, useState } from "react";
 import dapp from "../dapp";
+import NameInput from "./nameInput";
 
 export const submit = async (id: string, name: string) => {
     try {
@@ -13,14 +14,14 @@ export const submit = async (id: string, name: string) => {
 }
 
 const SubmitForm: FC<{ ids: number[] }> = ({ ids }) => {
-    const [id, setId] = useState<number | string>()
+    const [id, setId] = useState("")
     const [name, setName] = useState("")
     const [loading, setLoading] = useState(false)
 
     const handleChange = (setter: Function) => (e: ChangeEvent<HTMLInputElement>) => setter(e.target.value)
     const handleSubmit = () => {
         setLoading(true)
-        submit(String(id) || "?", name)
+        submit(id || "?", name)
             .then(() => setLoading(false))
     }
 
@@ -29,12 +30,16 @@ const SubmitForm: FC<{ ids: number[] }> = ({ ids }) => {
             <Grid container spacing={5} alignItems="center">
                 <Grid item>
                     <Autocomplete
-                        disablePortal
-                        options={ids}
+                        disablePortal freeSolo
+                        options={ids.map(i => i.toString())}
                         sx={{ width: 100 }}
-                        renderInput={(params) => <TextField {...params} variant="outlined" label="id" value={id} onChange={handleChange(setId)} />}
+                        inputValue={id}
+                        onInputChange={(_event, newInputValue) => {
+                            setId(newInputValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} variant="outlined" label="id" />}
                     />
-                    
+
                     {/* <FormControl fullWidth>
                         <InputLabel id="idLabel">id</InputLabel>
                         <Select
@@ -47,11 +52,11 @@ const SubmitForm: FC<{ ids: number[] }> = ({ ids }) => {
                     </FormControl> */}
                 </Grid>
                 <Grid item>
-                    <TextField variant="outlined" label="name" value={name} onChange={handleChange(setName)} />
+                    <NameInput value={name} onChange={handleChange(setName)} />
                 </Grid>
                 <Grid item>
                     <Button variant="contained" size="large" onClick={handleSubmit}
-                        disabled={loading || id == undefined || name == ""} >Submit{loading ? "ting" : ""}</Button> {/* cspell:disable-line */}
+                        disabled={loading || id == "" || name == ""} >Submit{loading ? "ting" : ""}</Button> {/* cspell:disable-line */}
                 </Grid>
             </Grid>
         </Paper>

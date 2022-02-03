@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BigNumber, ethers } from 'ethers';
 import { ChangeEvent, FC, useState } from 'react'
 import dapp from "../dapp";
+import NameInput from './nameInput';
 import { submit } from './SubmitForm';
 
 const mint = async (to: string, name: string, onMint: Function) => {
@@ -37,10 +38,10 @@ const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {
         <Paper variant="outlined" sx={{ p: 2, width: "max-content" }}>
             <Grid container spacing={5} alignItems="center">
                 <Grid item>
-                    <TextField variant="outlined" label="address" value={mintTo} onChange={handleChange(setMintTo)} />
+                    <TextField variant="outlined" label="Address" value={mintTo} onChange={handleChange(setMintTo)} />
                 </Grid>
                 <Grid item>
-                    <TextField variant="outlined" label="name" value={name} onChange={handleChange(setName)} />
+                    <NameInput value={name} onChange={handleChange(setName)} />
                 </Grid>
                 <Grid item>
                     <Button variant="contained" size="large" onClick={handleSubmit}
