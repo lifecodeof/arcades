@@ -28,8 +28,11 @@ const App: FC = () => {
   const [tab, setTab] = useState(0)
   const [nfts, setNfts] = useState<Nft[]>()
   const [error, setError] = useState<AxiosError & Error | null>(null)
-  const refreshNfts = () => getNfts().then(setNfts)
-  if (!nfts) refreshNfts()
+  const refreshNfts = () => {
+    setNfts([])
+    getNfts().then(setNfts)
+  }
+  if (nfts === undefined) refreshNfts()
   const handleClose = () => setError(null)
   dapp.error.listener = e => {
     console.error(e)
@@ -42,7 +45,7 @@ const App: FC = () => {
     <>
       <NavBar />
 
-      <Snackbar open={error != null} autoHideDuration={10000} onClose={handleClose}>
+      <Snackbar open={error != null} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {error?.isAxiosError ? error.response?.data : error?.message}
         </Alert>

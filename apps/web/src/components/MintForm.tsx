@@ -3,7 +3,7 @@ import axios from 'axios';
 import { BigNumber, ethers } from 'ethers';
 import { ChangeEvent, FC, useState } from 'react'
 import dapp from "../dapp";
-import NameInput from './nameInput';
+import NameInput from './NameInput';
 import { submit } from './SubmitForm';
 
 const mint = async (to: string, name: string, onMint: Function) => {

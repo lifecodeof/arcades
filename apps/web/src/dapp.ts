@@ -18,17 +18,29 @@ export class dApp {
     }
 
     constructor() {
-        this.provider = ethers.providers.getDefaultProvider()
+        this.provider = new ethers.providers.JsonRpcProvider({
+            url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        })
+
         this.arcades = new ethers.Contract(addresses.arcades, ARC.abi, this.provider) as Arcades
         this.scrapToken = new ethers.Contract(addresses.scrapToken, SCRAP.abi, this.provider) as ScrapToken
 
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
         this.signer = web3Provider.getSigner()
-        window.ethereum.request({ method: 'eth_requestAccounts' })
-            .then(() => {
-                this.arcades.connect(this.signer)
-                this.scrapToken.connect(this.signer)
-            })
+        if (window.ethereum)
+            (<Promise<string[]>>window.ethereum.request({ method: 'eth_requestAccounts' }))
+                .then(() => {
+                    this.provider = web3Provider
+                    this.arcades.connect(this.signer)
+                    this.scrapToken.connect(this.signer)
+                })
+                .then(() => web3Provider.detectNetwork())
+                .then(n => {
+                    if (n.chainId != 56) {
+                        this.error.emit(new Error(`You are on ${n.name} network please switch to BSC Testnet`))
+                        this.switchNetworks()
+                    }
+                })
     }
 
     registerToken(token: Contract, symbol: string, isNFT: boolean) {
@@ -44,6 +56,34 @@ export class dApp {
                 },
             },
         });
+    }
+
+    private async switchNetworks() {
+        try {
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x61' }],
+            });
+        } catch (switchError) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if ((<any>switchError).code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: '0x61',
+                                chainName: 'BSC Testnet',
+                                rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+                            },
+                        ],
+                    });
+                } catch (addError) {
+                    // handle "add" error
+                }
+            }
+            // handle other "switch" errors
+        }
     }
 }
 

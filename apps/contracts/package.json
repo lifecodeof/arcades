@@ -2,8 +2,7 @@
   "name": "contracts",
   "version": "0.0.0",
   "scripts": {
-    "deploy": "hardhat run ./scripts/deploy.ts",
-    "build": "hardhat compile"
+    "deploy": "hardhat run ./scripts/deploy.ts"
   },
   "files": [
     "typechain",
