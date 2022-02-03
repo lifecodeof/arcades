@@ -9,7 +9,7 @@ declare let window: Window & typeof globalThis & { ethereum: any, dapp: dApp };
 export class dApp {
     arcades: Arcades
     scrapToken: ScrapToken
-    provider: ethers.providers.Web3Provider
+    provider: ethers.providers.BaseProvider
     signer: ethers.providers.JsonRpcSigner
     assetBase = "https://zi9xsu.deta.dev/"
     error = {
@@ -18,11 +18,17 @@ export class dApp {
     }
 
     constructor() {
+        this.provider = ethers.providers.getDefaultProvider()
+        this.arcades = new ethers.Contract(addresses.arcades, ARC.abi, this.provider) as Arcades
+        this.scrapToken = new ethers.Contract(addresses.scrapToken, SCRAP.abi, this.provider) as ScrapToken
+
+        const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
+        this.signer = web3Provider.getSigner()
         window.ethereum.request({ method: 'eth_requestAccounts' })
-        this.provider = new ethers.providers.Web3Provider(window.ethereum)
-        this.signer = this.provider.getSigner()
-        this.arcades = new ethers.Contract(addresses.arcades, ARC.abi, this.signer) as Arcades
-        this.scrapToken = new ethers.Contract(addresses.scrapToken, SCRAP.abi, this.signer) as ScrapToken
+            .then(() => {
+                this.arcades.connect(this.signer)
+                this.scrapToken.connect(this.signer)
+            })
     }
 
     registerToken(token: Contract, symbol: string, isNFT: boolean) {
