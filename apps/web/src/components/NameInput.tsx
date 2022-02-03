@@ -8,7 +8,7 @@ const NameInput: FC<{
     const [error, setError] = useState(false)
 
     const handleChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> = e => {
-        if (e.target.value.length > 3) setError(true)
+        if (!(e.target.value.length == 3 || e.target.value.length == 0)) setError(true)
         else setError(false)
         e.target.value = e.target.value.toUpperCase()
         onChange(e)
@@ -22,7 +22,7 @@ const NameInput: FC<{
             onChange={handleChange}
             aria-describedby="name-input-text"
             error={error}
-            { ...(error ? {helperText:"max 3 chars"} : {})}
+            { ...(error ? {helperText:"must be 3 chars"} : {})}
         />
     )
 }

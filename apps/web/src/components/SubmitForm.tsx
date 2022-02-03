@@ -2,7 +2,7 @@ import { Paper, Grid, TextField, Button, MenuItem, Select, InputLabel, FormContr
 import axios from "axios";
 import { ChangeEvent, FC, useState } from "react";
 import dapp from "../dapp";
-import NameInput from "./nameInput";
+import NameInput from "./NameInput";
 
 export const submit = async (id: string, name: string) => {
     try {
@@ -13,7 +13,7 @@ export const submit = async (id: string, name: string) => {
     }
 }
 
-const SubmitForm: FC<{ ids: number[] }> = ({ ids }) => {
+const SubmitForm: FC<{ ids: number[], onSubmit: Function }> = ({ ids, onSubmit }) => {
     const [id, setId] = useState("")
     const [name, setName] = useState("")
     const [loading, setLoading] = useState(false)
@@ -23,6 +23,7 @@ const SubmitForm: FC<{ ids: number[] }> = ({ ids }) => {
         setLoading(true)
         submit(id || "?", name)
             .then(() => setLoading(false))
+            .then(() => onSubmit())
     }
 
     return (

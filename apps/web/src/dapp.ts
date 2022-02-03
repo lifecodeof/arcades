@@ -31,19 +31,20 @@ export class dApp {
             (<Promise<string[]>>window.ethereum.request({ method: 'eth_requestAccounts' }))
                 .then(() => {
                     this.provider = web3Provider
-                    this.arcades.connect(this.signer)
-                    this.scrapToken.connect(this.signer)
+                    this.signer = web3Provider.getSigner() // refresh valid signer
+                    this.arcades = this.arcades.connect(this.signer)
+                    this.scrapToken = this.scrapToken.connect(this.signer)
                 })
                 .then(() => web3Provider.detectNetwork())
                 .then(n => {
-                    if (n.chainId != 56) {
+                    if (n.chainId != 97) {
                         this.error.emit(new Error(`You are on ${n.name} network please switch to BSC Testnet`))
                         this.switchNetworks()
                     }
                 })
     }
 
-    registerToken(token: Contract, symbol: string, isNFT: boolean) {
+    registerToken(token: Contract, symbol: string, isNFT: boolean, image: string) {
         return window.ethereum.request({
             method: 'wallet_watchAsset',
             params: {
@@ -52,7 +53,7 @@ export class dApp {
                     address: token.address, // The address that the token is at.
                     symbol: symbol, // A ticker symbol or shorthand, up to 5 chars.
                     decimals: isNFT ? 0 : 18, // The number of decimals in the token
-                    image: "https://5.imimg.com/data5/VM/XJ/HU/SELLER-3837880/nickel-alloy-nuts-bolts-500x500.jpg", // A string url of the token logo
+                    image, // A string url of the token logo
                 },
             },
         });

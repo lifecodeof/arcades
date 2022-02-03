@@ -10,7 +10,8 @@ const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
             <CardMedia component="img" image={nft.meta.image} sx={{ width: "32rem" }} />
             <CardContent>
                 <Typography gutterBottom variant="h5">
-                    {nft.meta.name} &#35;{nft.id}
+                    {nft.meta.name}
+                    <Chip label={`#${nft.id}`} sx={{float:"right"}}/>
                 </Typography>
                 <Typography>owner:&nbsp;
                     <Link href={`https://testnet.bscscan.com/address/${nft.owner}`}

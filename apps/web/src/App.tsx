@@ -29,7 +29,7 @@ const App: FC = () => {
   const [nfts, setNfts] = useState<Nft[]>()
   const [error, setError] = useState<AxiosError & Error | null>(null)
   const refreshNfts = () => {
-    setNfts([])
+    if(nfts === undefined) setNfts([])
     getNfts().then(setNfts)
   }
   if (nfts === undefined) refreshNfts()
@@ -58,7 +58,9 @@ const App: FC = () => {
             <Tab label="Submit" id="submitTab" />
           </Tabs>
           <div hidden={tab != 0}><MintForm onSubmit={refreshNfts} /></div>
-          <div hidden={tab != 1}><SubmitForm ids={nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []} /></div>
+          <div hidden={tab != 1}>
+            <SubmitForm ids={nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []} onSubmit={refreshNfts}  />
+            </div>
         </div>
 
         <NftList nfts={nfts || []} />
