@@ -1,0 +1,16 @@
+{
+  "name": "arcades",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lifecodeof/arcades.git"
+  },
+  "keywords": [],
+  "author": "lifecodeof",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
