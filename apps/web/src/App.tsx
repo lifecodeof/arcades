@@ -6,7 +6,7 @@ import { Container, Tabs, Tab, Alert, Snackbar } from '@mui/material'
 import NavBar from './components/NavBar'
 import SubmitForm from './components/SubmitForm'
 import NftList from './components/NftList'
-import { Nft } from "meta"
+import { Nft } from "./meta"
 
 async function getNfts() {
   let nfts: Nft[] = []

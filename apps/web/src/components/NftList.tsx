@@ -1,6 +1,6 @@
 import { Card, CardContent, CardMedia, Chip, Grid, Link, Typography } from "@mui/material"
 import { FC } from "react"
-import { Nft } from "meta"
+import { Nft } from "../meta"
 
 const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
     const nftCards = nfts.map(nft => <Grid item key={nft.id}>

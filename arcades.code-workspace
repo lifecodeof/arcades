@@ -8,12 +8,6 @@
 		},
 		{
 			"path": "apps\\web"
-		},
-		{
-			"path": "packages\\img-producer"
-		},
-		{
-			"path": "packages\\meta"
 		}
 	]
 }
