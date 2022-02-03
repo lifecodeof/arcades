@@ -2,7 +2,7 @@ import { Contract, ethers } from "ethers"
 import ARC from "./artifacts/contracts/Arcades.sol/Arcades.json"
 import SCRAP from "./artifacts/contracts/ScrapToken.sol/ScrapToken.json"
 import addresses from "./artifacts/contract-addresses.json"
-import { Arcades, ScrapToken } from "contracts/typechain"
+import { Arcades, ScrapToken } from "./typechain"
 
 declare let window: Window & typeof globalThis & { ethereum: any, dapp: dApp };
 
