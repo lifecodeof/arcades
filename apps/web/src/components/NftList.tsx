@@ -1,7 +1,5 @@
 import { Card, CardContent, CardMedia, Chip, Grid, Link, Typography } from "@mui/material"
-import axios from "axios"
-import { FC, useState } from "react"
-import dapp from "../dapp"
+import { FC } from "react"
 import { Nft } from "meta"
 
 const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
