@@ -39,7 +39,7 @@ const App: FC = () => {
     setError(e)
   }
 
-  useEffect(() => { dapp.signer.getAddress().then(setMe) })
+  useEffect(() => { dapp.signer?.getAddress().then(setMe) })
 
   return (
     <>
