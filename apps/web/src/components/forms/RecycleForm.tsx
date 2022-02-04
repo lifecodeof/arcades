@@ -1,5 +1,6 @@
-import { Grid, Autocomplete, TextField, Button} from "@mui/material"
-import { FC, useState } from "react"
+import { Grid, Autocomplete, TextField, Button } from "@mui/material"
+import { formatEther } from "ethers/lib/utils"
+import { FC, useEffect, useState } from "react"
 import dapp from "../../dapp"
 import BaseForm from "./BaseForm"
 
@@ -8,6 +9,9 @@ const recycle = async (id: string) => await (await dapp.arcades.recycle(id)).wai
 const RecycleForm: FC<{ ids: number[], onSubmit: Function }> = ({ ids, onSubmit }) => {
     const [id, setId] = useState("")
     const [loading, setLoading] = useState(false)
+    const [refundAmount, setRefundAmount] = useState("?")
+
+    useEffect(() => { dapp.arcades.refundAmount().then(formatEther).then(setRefundAmount) })
 
     const handleSubmit = () => {
         setLoading(true)
@@ -32,7 +36,10 @@ const RecycleForm: FC<{ ids: number[], onSubmit: Function }> = ({ ids, onSubmit 
             </Grid>
             <Grid item>
                 <Button variant="contained" size="large" onClick={handleSubmit}
-                    disabled={loading || id == "" } >Recycl{loading ? "ing" : "e"}</Button> {/* cspell:disable-line */}
+                    disabled={loading || id == ""} >
+                    Recycl{loading ? "ing" : "e"} {/* cspell:disable-line */}
+                    (+{refundAmount} SCRAP)
+                </Button>
             </Grid>
         </BaseForm>
     )
