@@ -17,11 +17,12 @@ const actions = [
 
 
 const NavBar: FC = () => {
+    const buttonStyle = { my: 2, color: 'white', display: 'block', ml: 2 }
     const [connecting, setConnecting] = useState(false)
     const getActions = () => actions.map(action => <Button
         key={action.text}
         onClick={action.onClick}
-        sx={{ my: 2, color: 'white', display: 'block', ml: 2 }}>
+        sx={buttonStyle}>
         {action.text}</Button>
     )
 
@@ -37,12 +38,12 @@ const NavBar: FC = () => {
                     >👾 Arcades</Typography>
                     <Divider orientation="vertical" variant="middle" flexItem />
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {connecting ? <Button disabled={true}>Connecting...</Button> :
+                        {connecting ? <Button disabled={true} sx={buttonStyle}>Connecting...</Button> :
                             (dapp.walletConnected ? getActions() :
                                 <Button onClick={() => {
                                     setConnecting(true)
                                     dapp.connectWallet().then(() => setConnecting(false));
-                                }} sx={{ my: 2, color: 'white', display: 'block', ml: 2 }}>
+                                }} sx={buttonStyle}>
                                     connect wallet
                                 </Button>
                             )}
