@@ -10,7 +10,7 @@ export const submit = async (id: string, name: string) => {
         const signature = await dapp.signer?.signMessage(`I am the owner of #${id} ARC`)
         await axios.post(dapp.assetBase + "submit", { name, signature, id })
     } catch (error) {
-        dapp.error.emit(error)
+        dapp.events.emit("error", error as Error)
     }
 }
 

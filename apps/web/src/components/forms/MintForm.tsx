@@ -14,7 +14,7 @@ const mint = async (to: string, name: string, onMint: Function) => {
         onMint()
         await submit(id, name)
     } catch (error) {
-        dapp.error.emit(error)
+        dapp.events.emit("error", error as Error)
     }
 }
 

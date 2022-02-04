@@ -35,12 +35,15 @@ const App: FC = () => {
   }
   if (nfts === undefined) refreshNfts()
   const handleClose = () => setError(null)
-  dapp.error.listener = e => {
-    console.error(e)
-    setError(e)
-  }
 
-  useEffect(() => { dapp.signer?.getAddress().then(setMe) })
+  useEffect(() => {
+    dapp.events.on("connect", setMe)
+
+    dapp.events.on("error", e => {
+      console.error(e)
+      setError(e as any)
+    })
+  })
   const getOwnedIds = () => nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []
 
   return (

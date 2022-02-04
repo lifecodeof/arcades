@@ -3,6 +3,13 @@ import ARC from "./artifacts/contracts/Arcades.sol/Arcades.json"
 import SCRAP from "./artifacts/contracts/ScrapToken.sol/ScrapToken.json"
 import addresses from "./artifacts/contract-addresses.json"
 import { Arcades, ScrapToken } from "./typechain/index"
+import mitt from "mitt"
+import { AxiosError } from "axios"
+
+type Events = {
+    error: Error
+    connect: string
+}
 
 declare let window: Window & typeof globalThis & { ethereum: any, dapp: dApp };
 
@@ -13,10 +20,7 @@ export class dApp {
     signer: ethers.providers.JsonRpcSigner | undefined
     assetBase = "https://zi9xsu.deta.dev/"
     walletConnected: boolean = false
-    error = {
-        listener: (_e: any) => { },
-        emit: (e: any) => this.error.listener(e)
-    }
+    events = mitt<Events>()
 
     constructor() {
         this.provider = new ethers.providers.JsonRpcProvider({
@@ -25,11 +29,10 @@ export class dApp {
 
         this.arcades = new ethers.Contract(addresses.arcades, ARC.abi, this.provider) as Arcades
         this.scrapToken = new ethers.Contract(addresses.scrapToken, SCRAP.abi, this.provider) as ScrapToken
-
     }
 
     async connectWallet() {
-        if (!window.ethereum) return this.error.emit(new Error("No wallet provider was found"))
+        if (!window.ethereum) return this.events.emit("error", new Error("No wallet provider was found"))
         await (<Promise<string[]>>window.ethereum.request({ method: 'eth_requestAccounts' }))
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
         this.provider = web3Provider
@@ -40,9 +43,12 @@ export class dApp {
 
         const n = await web3Provider.detectNetwork()
         if (n.chainId != 97) {
-            this.error.emit(new Error(`You are on ${n.name} network please switch to BSC Testnet`))
+            this.events.emit("error", new Error(`You are on ${n.name} network please switch to BSC Testnet`))
             this.switchNetworks()
-        } else { this.walletConnected = true }
+        } else {
+            this.walletConnected = true
+            this.events.emit("connect", await this.signer.getAddress())
+        }
     }
 
     registerToken(token: Contract, symbol: string, isNFT: boolean, image: string) {
