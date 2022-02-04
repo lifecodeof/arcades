@@ -1,9 +1,10 @@
 import { Button, Grid, Paper, TextField } from '@mui/material';
 import { BigNumber, ethers } from 'ethers';
 import { ChangeEvent, FC, useState } from 'react'
-import dapp from "../dapp";
-import NameInput from './NameInput';
+import dapp from "../../dapp";
+import NameInput from '../NameInput';
 import { submit } from './SubmitForm';
+import BaseForm from './BaseForm';
 
 const mint = async (to: string, name: string, onMint: Function) => {
     try {
@@ -34,10 +35,9 @@ const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {
     }
 
     return (
-        <Paper variant="outlined" sx={{ p: 2, width: "max-content" }}>
-            <Grid container spacing={5} alignItems="center">
+            <BaseForm>
                 <Grid item>
-                    <TextField variant="outlined" label="Address" value={mintTo} onChange={handleChange(setMintTo)} />
+                    <TextField variant="outlined" label="address" value={mintTo} onChange={handleChange(setMintTo)} />
                 </Grid>
                 <Grid item>
                     <NameInput value={name} onChange={handleChange(setName)} />
@@ -46,8 +46,7 @@ const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {
                     <Button variant="contained" size="large" onClick={handleSubmit}
                         disabled={loading || mintTo == "" || name == ""} >{btnText}</Button>
                 </Grid>
-            </Grid>
-        </Paper>
+            </BaseForm>
     )
 
 

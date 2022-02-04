@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from 'react'
 import dapp from './dapp'
-import MintForm from "./components/MintForm"
 import axios, { AxiosError } from 'axios'
 import { Container, Tabs, Tab, Alert, Snackbar } from '@mui/material'
 import NavBar from './components/NavBar'
-import SubmitForm from './components/SubmitForm'
 import NftList from './components/NftList'
 import { Nft } from "./meta"
+import MintForm from "./components/forms/MintForm"
+import SubmitForm from './components/forms/SubmitForm'
+import RecycleForm from './components/forms/RecycleForm'
 
 async function getNfts() {
   let nfts: Nft[] = []
@@ -29,7 +30,7 @@ const App: FC = () => {
   const [nfts, setNfts] = useState<Nft[]>()
   const [error, setError] = useState<AxiosError & Error | null>(null)
   const refreshNfts = () => {
-    if(nfts === undefined) setNfts([])
+    if (nfts === undefined) setNfts([])
     getNfts().then(setNfts)
   }
   if (nfts === undefined) refreshNfts()
@@ -40,6 +41,7 @@ const App: FC = () => {
   }
 
   useEffect(() => { dapp.signer?.getAddress().then(setMe) })
+  const getOwnedIds = () => nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []
 
   return (
     <>
@@ -52,15 +54,15 @@ const App: FC = () => {
       </Snackbar>
 
       <Container sx={{ my: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div>
+        <div style={{ width: 620 }}>
           <Tabs value={tab} onChange={(e, v) => setTab(v)} variant="fullWidth">
             <Tab label="Mint" id="mintTab" />
             <Tab label="Submit" id="submitTab" />
+            <Tab label="Recycle" id="recycleTab" />
           </Tabs>
           <div hidden={tab != 0}><MintForm onSubmit={refreshNfts} /></div>
-          <div hidden={tab != 1}>
-            <SubmitForm ids={nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []} onSubmit={refreshNfts}  />
-            </div>
+          <div hidden={tab != 1}><SubmitForm ids={getOwnedIds()} onSubmit={refreshNfts} /></div>
+          <div hidden={tab != 2}><RecycleForm ids={getOwnedIds()} onSubmit={refreshNfts} /></div>
         </div>
 
         <NftList nfts={nfts || []} />

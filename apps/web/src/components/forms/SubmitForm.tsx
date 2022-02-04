@@ -1,8 +1,9 @@
-import { Paper, Grid, TextField, Button, Autocomplete } from "@mui/material";
+import { Grid, TextField, Button, Autocomplete } from "@mui/material";
 import axios from "axios";
 import { ChangeEvent, FC, useState } from "react";
-import dapp from "../dapp";
-import NameInput from "./NameInput";
+import dapp from "../../dapp";
+import NameInput from "../NameInput";
+import BaseForm from "./BaseForm";
 
 export const submit = async (id: string, name: string) => {
     try {
@@ -27,21 +28,20 @@ const SubmitForm: FC<{ ids: number[], onSubmit: Function }> = ({ ids, onSubmit }
     }
 
     return (
-        <Paper variant="outlined" sx={{ p: 2, width: "max-content" }}>
-            <Grid container spacing={5} alignItems="center">
-                <Grid item>
-                    <Autocomplete
-                        disablePortal freeSolo
-                        options={ids.map(i => i.toString())}
-                        sx={{ width: 100 }}
-                        inputValue={id}
-                        onInputChange={(_event, newInputValue) => {
-                            setId(newInputValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} variant="outlined" label="id" />}
-                    />
+        <BaseForm>
+            <Grid item>
+                <Autocomplete
+                    disablePortal freeSolo
+                    options={ids.map(i => i.toString())}
+                    sx={{ width: 100 }}
+                    inputValue={id}
+                    onInputChange={(_event, newInputValue) => {
+                        setId(newInputValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} variant="outlined" label="id" />}
+                />
 
-                    {/* <FormControl fullWidth>
+                {/* <FormControl fullWidth>
                         <InputLabel id="idLabel">id</InputLabel>
                         <Select
                             labelId="idLabel"
@@ -51,16 +51,15 @@ const SubmitForm: FC<{ ids: number[], onSubmit: Function }> = ({ ids, onSubmit }
                         > {ids.map(id => <MenuItem key={id} value={id}>{id}</MenuItem>)}
                         </Select>
                     </FormControl> */}
-                </Grid>
-                <Grid item>
-                    <NameInput value={name} onChange={handleChange(setName)} />
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" size="large" onClick={handleSubmit}
-                        disabled={loading || id == "" || name == ""} >Submit{loading ? "ting" : ""}</Button> {/* cspell:disable-line */}
-                </Grid>
             </Grid>
-        </Paper>
+            <Grid item>
+                <NameInput value={name} onChange={handleChange(setName)} />
+            </Grid>
+            <Grid item>
+                <Button variant="contained" size="large" onClick={handleSubmit}
+                    disabled={loading || id == "" || name == ""} >Submit{loading ? "ting" : ""}</Button> {/* cspell:disable-line */}
+            </Grid>
+        </BaseForm>
     )
 }
 
