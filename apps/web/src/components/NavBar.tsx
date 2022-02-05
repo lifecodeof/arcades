@@ -44,7 +44,7 @@ const NavBar: FC = () => {
                                     setConnecting(true)
                                     dapp.connectWallet().then(() => setConnecting(false));
                                 }} sx={buttonStyle}>
-                                    connect wallet
+                                    connect wallet (BSC testnet)
                                 </Button>
                             )}
                     </Box>
