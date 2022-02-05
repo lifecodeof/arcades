@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import dapp from './dapp'
 import axios, { AxiosError } from 'axios'
 import { Container, Tabs, Tab, Alert, Snackbar } from '@mui/material'
+import { SnackbarProps } from '@mui/material/SnackBar'
 import NavBar from './components/NavBar'
 import NftList from './components/NftList'
 import { Nft } from "./meta"
@@ -25,24 +26,31 @@ async function getNfts() {
   return nfts
 }
 
+function messageError(e: Error & AxiosError & any): string {
+  if (e?.isAxiosError) return e.response?.data
+  if (e?.reason == 'sending a transaction requires a signer')
+    return "You must connect a wallet to interact with contract"
+  return e?.message
+}
+
 const App: FC = () => {
   const [me, setMe] = useState("")
   const [tab, setTab] = useState(0)
   const [nfts, setNfts] = useState<Nft[]>()
-  const [error, setError] = useState<AxiosError & Error | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const refreshNfts = () => {
     if (nfts === undefined) setNfts([])
     getNfts().then(setNfts)
   }
   if (nfts === undefined) refreshNfts()
-  const handleClose = () => setError(null)
+  const handleClose: SnackbarProps["onClose"] = (_e, r = "escapeKeyDown") => r != "clickaway" && setErrorMsg(null)
 
   useEffect(() => {
     dapp.events.on("connect", setMe)
 
     dapp.events.on("error", e => {
       console.error(e)
-      setError(e as any)
+      setErrorMsg(messageError(e))
     })
   })
   const getOwnedIds = () => nfts?.filter(nft => nft.owner == me).map(nft => nft.id) || []
@@ -51,14 +59,14 @@ const App: FC = () => {
     <>
       <NavBar />
 
-      <Snackbar open={error != null} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {error?.isAxiosError ? error.response?.data : error?.message}
+      <Snackbar open={errorMsg != null} onClose={handleClose}>
+        <Alert onClose={handleClose as any} severity="error" sx={{ width: '100%' }}>
+          {errorMsg}
         </Alert>
       </Snackbar>
 
       <Container sx={{ my: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ width: 620 }}>
+        <div style={{ width: "max-content" }}>
           <Tabs value={tab} onChange={(e, v) => setTab(v)} variant="fullWidth">
             <Tab label="Mint" id="mintTab" />
             <Tab label="Submit" id="submitTab" />
