@@ -8,6 +8,7 @@ import { Nft } from "./meta"
 import MintForm from "./components/forms/MintForm"
 import SubmitForm from './components/forms/SubmitForm'
 import RecycleForm from './components/forms/RecycleForm'
+import AddressInfoCard from './components/InfoCard'
 
 async function getNfts() {
   let nfts: Nft[] = []
@@ -62,10 +63,12 @@ const App: FC = () => {
             <Tab label="Mint" id="mintTab" />
             <Tab label="Submit" id="submitTab" />
             <Tab label="Recycle" id="recycleTab" />
+            <Tab label="Contracts" id="contractsTab" />
           </Tabs>
           <div hidden={tab != 0}><MintForm onSubmit={refreshNfts} /></div>
           <div hidden={tab != 1}><SubmitForm ids={getOwnedIds()} onSubmit={refreshNfts} /></div>
           <div hidden={tab != 2}><RecycleForm ids={getOwnedIds()} onSubmit={refreshNfts} /></div>
+          <div hidden={tab != 3}><AddressInfoCard /></div>
         </div>
 
         <NftList nfts={nfts || []} />
