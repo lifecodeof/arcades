@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react'
 import dapp from './dapp'
 import axios, { AxiosError } from 'axios'
 import { Container, Tabs, Tab, Alert, Snackbar } from '@mui/material'
-import { SnackbarProps } from '@mui/material/SnackBar'
 import NavBar from './components/NavBar'
 import NftList from './components/NftList'
 import { Nft } from "./meta"
@@ -43,7 +42,7 @@ const App: FC = () => {
     getNfts().then(setNfts)
   }
   if (nfts === undefined) refreshNfts()
-  const handleClose: SnackbarProps["onClose"] = (_e, r = "escapeKeyDown") => r != "clickaway" && setErrorMsg(null)
+  const handleClose = (_e: any, r: any = "") => r != "clickaway" && setErrorMsg(null)
 
   useEffect(() => {
     dapp.events.on("connect", setMe)
