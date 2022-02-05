@@ -19,11 +19,15 @@ const alphanumeric = /^[a-z0-9]+$/i
 
 app.post("/submit", async (req, res) => {
     const { name, signature, id } = req.body
-    if (await db.get(id) != null && await drive.get(id + ".png") != null)
-        return res.status(400).send(`#${id} is already submitted`)
+    console.log(id,typeof id)
     if (typeof name != "string") return res.status(400).send("name must be string")
+    if (typeof signature != "string") return res.status(400).send("signature must be string")
+    if (typeof id != "string") return res.status(400).send("id must be string")
     if (name.length != 3) return res.status(400).send("name length must be 3")
     if (!alphanumeric.test(name)) return res.status(400).send("name must be alphanumeric")
+
+    if (await db.get(id) != null && await drive.get(id + ".png") != null)
+        return res.status(400).send(`#${id} is already submitted`)
 
     const address = ethers.utils.verifyMessage(`I am the owner of #${id} ARC`, signature)
 

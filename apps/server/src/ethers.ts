@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { Arcades } from 'contracts/typechain/Arcades'
+import { Arcades } from '../typechain/Arcades'
 import { join } from 'path'
 import { ethers } from "ethers"
 
