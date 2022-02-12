@@ -16,11 +16,9 @@ const NameInput: FC<{
 
     return (
         <TextField
-            id="name-input"
             label="name"
             value={value}
             onChange={handleChange}
-            aria-describedby="name-input-text"
             error={error}
             { ...(error ? {helperText:"must be 3 chars"} : {})}
         />

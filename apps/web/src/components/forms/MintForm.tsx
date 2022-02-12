@@ -48,19 +48,6 @@ const MintForm: FC<{ onSubmit: Function }> = ({ onSubmit }) => {
                 </Grid>
             </BaseForm>
     )
-
-
-
-    // <form>
-    //     <fieldset>
-    //         <label htmlFor="to">To</label>
-    //         <input type="text" placeholder="address" id="to" onChange={handleChange(setMintTo)} />
-    //         <label htmlFor="name">Name</label>
-    //         <input type="text" placeholder="name" id="name" onChange={handleChange(setName)} />
-    //         <input className="button-primary" type="submit" value="Mint" onClick={handleSubmit} />
-    //     </fieldset>
-    // </form>
-
 }
 
 export default MintForm
