@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Chip, Grid, Link, Typography } from "@mui/material"
+import { Card, CardContent, CardMedia, Chip, Grid, Link, Typography, CircularProgress } from "@mui/material"
 import { FC } from "react"
 import { Nft } from "../meta"
 
@@ -20,10 +20,9 @@ const NftList: FC<{ nfts: Nft[] }> = ({ nfts }) => {
                 </CardContent>
             </Card>
         </Grid>
-    }
-    )
+    })
 
-    return (
+    return nftCards.length == 0 ? <CircularProgress sx={{mt:4}} /> : (
         <Grid container sx={{ mt: 4, justifyContent: "space-evenly" }}>
             {nftCards}
         </Grid>
