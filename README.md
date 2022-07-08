@@ -1,5 +1,5 @@
 # Arcades
-Arcades are special nfts that you name. And it can be recycled to turn into scrap tokens
+Arcades are special NFT's that you name and it can be recycled to turn into SCRAP tokens.
 
 ---
 
