@@ -35,7 +35,7 @@ const NavBar: FC = () => {
                         noWrap
                         component="div"
                         sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-                    >👾 Arcades</Typography>
+                    >Arcades</Typography>
                     <Divider orientation="vertical" variant="middle" flexItem />
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {connecting ? <Button disabled={true} sx={buttonStyle}>Connecting...</Button> :
