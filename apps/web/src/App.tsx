@@ -78,7 +78,9 @@ const App: FC = () => {
           <div hidden={tab != 3}><AddressInfoCard /></div>
         </div>
 
-        <NftList nfts={nfts || []} />
+        <Alert severity="error">Backend server is down.</Alert>
+
+        {/* <NftList nfts={nfts || []} /> */}
 
       </Container>
     </>
