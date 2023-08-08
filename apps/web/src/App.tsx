@@ -78,7 +78,7 @@ const App: FC = () => {
           <div hidden={tab != 3}><AddressInfoCard /></div>
         </div>
 
-        <Alert severity="error">Backend server is down.</Alert>
+        <Alert severity="error" style={{ marginTop: "2rem" }}>Backend server is down.</Alert>
 
         {/* <NftList nfts={nfts || []} /> */}
 
